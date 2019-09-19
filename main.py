@@ -1,3 +1,5 @@
+# https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
+
 # source .venv/Scripts/activate
 # .venv/Lib/site-packages/pyqt5_tools/Qt/bin/designer.exe --> start designer
 
@@ -6,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from control.forward_selection import ForwardSelection
 from control.linear_regression import LinearRegression
+from control.naive_bayes import NaiveBayes
 
 pd.set_option('display.max_columns', None)
 
@@ -14,18 +17,17 @@ print(dataset.head(5))
 
 fs = ForwardSelection(dataset)
 lr = LinearRegression(dataset)
-print(lr.regression_table()[0])
+det_matrix, y_matrix = lr.determinant_matrix()
+print(y_matrix)
+print(lr.determinant())
 
-# columns = np.array([])
-# filtered_dataset = dataset.copy()
-# results = dict()
-# for col in filtered_dataset.columns:
-#     if col != 'Classification':
-#         columns = np.append(columns, col)
-#         results[col] = {
-#             "correlation": fs.correlation(filtered_dataset[col], filtered_dataset['Classification']),
-#             "correlation_squared": fs.correlation(filtered_dataset[col], filtered_dataset['Classification']) ** 2,
-#             "std": np.std(filtered_dataset[col])
-#         }
+ds = dataset.copy()
+labels = ds['Classification']
+features = ds.drop(['Classification'], axis=1)
+nb = NaiveBayes()
+nb.fit(features, labels)
+predicted = nb.predict(features)
+ds['Predicted'] = predicted
 
-# print(results)
+pd.set_option('display.max_rows', None)
+print(ds)
