@@ -10,6 +10,7 @@ class LinearRegression:
         self.columns = dataset.columns
         self.labels = dataset.iloc[:, -1]
         self.features = dataset.drop([self.columns[-1]], axis=1)
+        self.determinants = []
 
 
     def regression_table(self):
@@ -59,5 +60,16 @@ class LinearRegression:
             matrix = x_matrix.copy()
             matrix[:, i] = y_matrix
             b = np.append(b, np.linalg.det(matrix))
-        return b
+
+        determinants = np.array([])
+        for i in range(1, len(b)):
+            determinants = np.append(determinants, b[i] / b[0])
+
+        self.determinants = determinants
+        return determinants
         
+    def regression(self, data):
+        Y = self.determinants[0]
+        for i, row in enumerate(data):
+            Y += (self.determinants[i + 1] * row)
+        return Y
