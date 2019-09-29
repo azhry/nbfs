@@ -2,6 +2,7 @@
 
 # source .venv/Scripts/activate
 # .venv/Lib/site-packages/pyqt5_tools/Qt/bin/designer.exe --> start designer
+# pyuic5 -x main_window2.ui -o main_window2.py
 
 import pandas as pd
 import numpy as np
